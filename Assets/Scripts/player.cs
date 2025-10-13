@@ -43,18 +43,18 @@ public class player : MonoBehaviour
             }
             else
             {
-                animator.Play("Player_Run");
+                animator.Play("PlayerWalking");
             }
         }
         else
         {
             if (rb.linearVelocityY > 0)
             {
-                animator.Play("Player_Jump");
+                animator.Play("PlayerJump");
             }
             else
             {
-                animator.Play("Player_Fall");
+                animator.Play("PlayerFall");
             }
         }
     }
