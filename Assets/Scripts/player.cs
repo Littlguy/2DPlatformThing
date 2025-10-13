@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
+    public int health = 100;
     public float movespeed = 5f;
     public float jumpForce = 10f;
     public Transform groundCheck;
@@ -15,10 +16,12 @@ public class player : MonoBehaviour
     private int extraJumpsCounter;
 
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<spriteRenderer>();
 
         extraJumpsCounter = extraJumpsAmount;
     }
@@ -26,6 +29,10 @@ public class player : MonoBehaviour
     {
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * movespeed, rb.linearVelocity.y);
+        if (isGrounded) 
+        {
+            extraJumpsCounter = extraJumpsAmount;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -71,4 +78,29 @@ public class player : MonoBehaviour
             }
         }
     }
-} 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Damage")
+        {
+            health -= 25;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            StartCorountine(BlinkRed());
+
+            if (health <= 0) 
+            {
+                Die();
+            }
+        }
+    }
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
+    }
+    private void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+    }
+
+}
