@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class player : MonoBehaviour
 {
@@ -16,12 +17,12 @@ public class player : MonoBehaviour
     private int extraJumpsCounter;
 
     private Animator animator;
-    //private SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        //spriteRenderer = GetComponent<spriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         extraJumpsCounter = extraJumpsAmount;
     }
@@ -78,29 +79,30 @@ public class player : MonoBehaviour
             }
         }
     }
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "Damage")
-    //    {
-    //health -= 25;
-    //rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-    //        //StartCorountine(BlinkRed());
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Damage")
+        {
+             health -= 25;
+             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            StartCorountine(BlinkRed());
 
-    //       if (health <= 0)
-    //      {
-    //Die();
-    //}
-    //}
-    //}
-    //private IEnumerator BlinkRed()
-    //{
-    //spriteRenderer.color = Color.red;
-    //yield return new WaitForSeconds(0.1f);
-    //spriteRenderer.color = Color.white;
-    //}
-    //private void Die()
-    //{
-    //UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-    //}
-
+           if (health <= 0)
+           {
+             Die();
+           }
+        }
+    }
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
+    }
+    private void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+    }
+    
 }
