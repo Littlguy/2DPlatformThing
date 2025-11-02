@@ -86,7 +86,7 @@ public class player : MonoBehaviour
         {
              health -= 25;
              rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            StartCorountine(BlinkRed());
+            StartCoroutine(BlinkRed());
 
            if (health <= 0)
            {
